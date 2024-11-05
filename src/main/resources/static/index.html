@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Swagger Viewer</title>
+    <script type="module" src="https://unpkg.com/rapidoc@latest/dist/rapidoc-min.js"></script>
+    <style>
+        #container {
+            display: flex;
+            height: 100vh;
+        }
+        #sidebar {
+            width: 20%;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+        #main {
+            flex-grow: 1;
+        }
+        .doc-item {
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+        .doc-item:hover {
+            background-color: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Sidebar with list of Swagger docs -->
+    <div id="sidebar">
+        <h3>Select API Doc</h3>
+        <div id="doc-list">
+            <!-- List of docs will be populated here -->
+        </div>
+    </div>
+
+    <!-- Main area for RapiDoc -->
+    <div id="main">
+        <rapi-doc
+            id="rapidoc"
+            spec-url=""
+            theme="light"
+            render-style="read"
+            show-header="false"
+        ></rapi-doc>
+    </div>
+</div>
+
+<script>
+// List of Swagger doc URLs (can come from a backend or static JSON)
+const swaggerDocs = [
+    { name: 'Service 1', version: '1.0', url: 'https://petstore.swagger.io/v2/swagger.json' },
+    { name: 'Service 2', version: '2.0', url: 'https://example.com/swagger2.json' },
+    { name: 'Service 3', version: '3.0', url: 'https://example.com/swagger3.json' }
+];
+
+// Function to populate the list of Swagger docs
+function populateDocList() {
+    const docList = document.getElementById('doc-list');
+    swaggerDocs.forEach(doc => {
+        const docItem = document.createElement('div');
+        docItem.className = 'doc-item';
+        docItem.textContent = `${doc.name} - v${doc.version}`;
+        docItem.onclick = () => loadSwaggerDoc(doc.url);
+        docList.appendChild(docItem);
+    });
+}
+
+// Function to load a Swagger doc into RapiDoc
+function loadSwaggerDoc(url) {
+    const rapiDoc = document.getElementById('rapidoc');
+    rapiDoc.setAttribute('spec-url', url);
+}
+
+// Initialize the doc list on page load
+populateDocList();
+</script>
+
+</body>
+</html>
